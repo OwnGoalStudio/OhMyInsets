@@ -1,8 +1,8 @@
 Package: com.82flex.ohmyinsets
 Name: Oh My Insets
-Version: 1.0
+Version: 1.2
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
+Description: Customize columns of CC and paddings of the status bar.
 Maintainer: Lessica <82flex@gmail.com>
 Author: Lessica <82flex@gmail.com>
 Section: Tweaks
