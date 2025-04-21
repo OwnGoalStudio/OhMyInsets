@@ -1,0 +1,1540 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.10 (swiftlang-5.10.0.13 clang-1500.3.9.4)
+// swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name SwiftUIIntrospect
+import Foundation
+import ObjectiveC
+import Swift
+import SwiftUI
+import UIKit
+import _AVKit_SwiftUI
+import _Concurrency
+import _MapKit_SwiftUI
+import _StringProcessing
+import _SwiftConcurrencyShims
+public struct IntrospectionScope : Swift.OptionSet, Swift.Sendable {
+  public static let receiver: SwiftUIIntrospect.IntrospectionScope
+  public static let ancestor: SwiftUIIntrospect.IntrospectionScope
+  @_spi(Internals) public let rawValue: Swift.UInt
+  @_spi(Internals) public init(rawValue: Swift.UInt)
+  public typealias ArrayLiteralElement = SwiftUIIntrospect.IntrospectionScope
+  public typealias Element = SwiftUIIntrospect.IntrospectionScope
+  public typealias RawValue = Swift.UInt
+}
+extension SwiftUI.View {
+  @_Concurrency.MainActor public func introspect<SwiftUIViewType, PlatformSpecificEntity>(_ viewType: SwiftUIViewType, on platforms: (SwiftUIIntrospect.PlatformViewVersionPredicate<SwiftUIViewType, PlatformSpecificEntity>)..., scope: SwiftUIIntrospect.IntrospectionScope? = nil, customize: @escaping (PlatformSpecificEntity) -> Swift.Void) -> some SwiftUI.View where SwiftUIViewType : SwiftUIIntrospect.IntrospectableViewType, PlatformSpecificEntity : SwiftUIIntrospect.PlatformEntity
+  
+}
+@_Concurrency.MainActor public protocol PlatformEntity : AnyObject {
+  associatedtype Base : SwiftUIIntrospect.PlatformEntity
+  @_spi(Internals) @_Concurrency.MainActor var ancestor: Self.Base? { get }
+  @_spi(Internals) @_Concurrency.MainActor var descendants: [Self.Base] { get }
+  @_spi(Internals) @_Concurrency.MainActor func isDescendant(of other: Self.Base) -> Swift.Bool
+}
+extension SwiftUIIntrospect.PlatformEntity {
+  @_spi(Internals) @_Concurrency.MainActor public var ancestor: Self.Base? {
+    get
+  }
+  @_spi(Internals) @_Concurrency.MainActor public var descendants: [Self.Base] {
+    get
+  }
+  @_spi(Internals) @_Concurrency.MainActor public func isDescendant(of other: Self.Base) -> Swift.Bool
+}
+extension SwiftUIIntrospect.PlatformEntity {
+  @_spi(Internals) @_Concurrency.MainActor public var ancestors: some Swift.Sequence<Self.Base> {
+    get
+  }
+  @_spi(Internals) @_Concurrency.MainActor public var allDescendants: some Swift.Sequence<Self.Base> {
+    get
+  }
+}
+extension UIKit.UIView : SwiftUIIntrospect.PlatformEntity {
+  @_spi(Internals) @_Concurrency.MainActor public var ancestor: SwiftUIIntrospect.PlatformView? {
+    get
+  }
+  @_spi(Internals) @_Concurrency.MainActor public var descendants: [SwiftUIIntrospect.PlatformView] {
+    get
+  }
+  public typealias Base = SwiftUIIntrospect.PlatformView
+}
+extension UIKit.UIViewController : SwiftUIIntrospect.PlatformEntity {
+  @_spi(Internals) @_Concurrency.MainActor public var ancestor: SwiftUIIntrospect.PlatformViewController? {
+    get
+  }
+  @_spi(Internals) @_Concurrency.MainActor public var descendants: [SwiftUIIntrospect.PlatformViewController] {
+    get
+  }
+  @_spi(Internals) @_Concurrency.MainActor public func isDescendant(of other: SwiftUIIntrospect.PlatformViewController) -> Swift.Bool
+  public typealias Base = SwiftUIIntrospect.PlatformViewController
+}
+extension UIKit.UIPresentationController : SwiftUIIntrospect.PlatformEntity {
+  public typealias Base = UIKit.UIPresentationController
+}
+@_Concurrency.MainActor public protocol IntrospectableViewType {
+  @_Concurrency.MainActor var scope: SwiftUIIntrospect.IntrospectionScope { get }
+}
+extension SwiftUIIntrospect.IntrospectableViewType {
+  @_Concurrency.MainActor public var scope: SwiftUIIntrospect.IntrospectionScope {
+    get
+  }
+}
+@_spi(Advanced) @_Concurrency.MainActor public struct IntrospectionSelector<Target> where Target : SwiftUIIntrospect.PlatformEntity {
+  @_spi(Advanced) @_Concurrency.MainActor public static var `default`: SwiftUIIntrospect.IntrospectionSelector<Target> {
+    @_spi(Advanced) get
+  }
+  @_spi(Advanced) @_Concurrency.MainActor public static func from<Entry>(_ entryType: Entry.Type, selector: @escaping @_Concurrency.MainActor (Entry) -> Target?) -> SwiftUIIntrospect.IntrospectionSelector<Target> where Entry : SwiftUIIntrospect.PlatformEntity
+  @_spi(Advanced) @_Concurrency.MainActor public func withReceiverSelector(_ selector: @escaping @_Concurrency.MainActor (SwiftUIIntrospect.PlatformViewController) -> Target?) -> SwiftUIIntrospect.IntrospectionSelector<Target>
+  @_spi(Advanced) @_Concurrency.MainActor public func withAncestorSelector(_ selector: @escaping @_Concurrency.MainActor (SwiftUIIntrospect.PlatformViewController) -> Target?) -> SwiftUIIntrospect.IntrospectionSelector<Target>
+}
+@_spi(Internals) public enum PlatformVersionCondition : Swift.Sendable {
+  @_spi(Internals) case past
+  @_spi(Internals) case current
+  @_spi(Internals) case future
+  @_spi(Internals) public static func == (a: SwiftUIIntrospect.PlatformVersionCondition, b: SwiftUIIntrospect.PlatformVersionCondition) -> Swift.Bool
+  @_spi(Internals) public func hash(into hasher: inout Swift.Hasher)
+  @_spi(Internals) public var hashValue: Swift.Int {
+    @_spi(Internals) get
+  }
+}
+public protocol PlatformVersion : Swift.Sendable {
+  @_spi(Internals) var condition: SwiftUIIntrospect.PlatformVersionCondition? { get }
+}
+extension SwiftUIIntrospect.PlatformVersion {
+  @_spi(Internals) public var isCurrent: Swift.Bool {
+    get
+  }
+  @_spi(Internals) public var isCurrentOrPast: Swift.Bool {
+    get
+  }
+  @_spi(Internals) public var condition: SwiftUIIntrospect.PlatformVersionCondition? {
+    get
+  }
+}
+public struct iOSVersion : SwiftUIIntrospect.PlatformVersion {
+  @_spi(Internals) public let condition: SwiftUIIntrospect.PlatformVersionCondition?
+  @_spi(Internals) public init(condition: () -> SwiftUIIntrospect.PlatformVersionCondition?)
+}
+extension SwiftUIIntrospect.iOSVersion {
+  public static let v13: SwiftUIIntrospect.iOSVersion
+  public static let v14: SwiftUIIntrospect.iOSVersion
+  public static let v15: SwiftUIIntrospect.iOSVersion
+  public static let v16: SwiftUIIntrospect.iOSVersion
+  public static let v17: SwiftUIIntrospect.iOSVersion
+  public static let v18: SwiftUIIntrospect.iOSVersion
+}
+public struct tvOSVersion : SwiftUIIntrospect.PlatformVersion {
+  @_spi(Internals) public let condition: SwiftUIIntrospect.PlatformVersionCondition?
+  @_spi(Internals) public init(condition: () -> SwiftUIIntrospect.PlatformVersionCondition?)
+}
+extension SwiftUIIntrospect.tvOSVersion {
+  public static let v13: SwiftUIIntrospect.tvOSVersion
+  public static let v14: SwiftUIIntrospect.tvOSVersion
+  public static let v15: SwiftUIIntrospect.tvOSVersion
+  public static let v16: SwiftUIIntrospect.tvOSVersion
+  public static let v17: SwiftUIIntrospect.tvOSVersion
+  public static let v18: SwiftUIIntrospect.tvOSVersion
+}
+public struct macOSVersion : SwiftUIIntrospect.PlatformVersion {
+  @_spi(Internals) public let condition: SwiftUIIntrospect.PlatformVersionCondition?
+  @_spi(Internals) public init(condition: () -> SwiftUIIntrospect.PlatformVersionCondition?)
+}
+extension SwiftUIIntrospect.macOSVersion {
+  public static let v10_15: SwiftUIIntrospect.macOSVersion
+  public static let v10_15_4: SwiftUIIntrospect.macOSVersion
+  public static let v11: SwiftUIIntrospect.macOSVersion
+  public static let v12: SwiftUIIntrospect.macOSVersion
+  public static let v13: SwiftUIIntrospect.macOSVersion
+  public static let v14: SwiftUIIntrospect.macOSVersion
+  public static let v15: SwiftUIIntrospect.macOSVersion
+}
+public struct visionOSVersion : SwiftUIIntrospect.PlatformVersion {
+  @_spi(Internals) public let condition: SwiftUIIntrospect.PlatformVersionCondition?
+  @_spi(Internals) public init(condition: () -> SwiftUIIntrospect.PlatformVersionCondition?)
+}
+extension SwiftUIIntrospect.visionOSVersion {
+  public static let v1: SwiftUIIntrospect.visionOSVersion
+  public static let v2: SwiftUIIntrospect.visionOSVersion
+}
+public typealias PlatformView = UIKit.UIView
+public typealias PlatformViewController = UIKit.UIViewController
+@_Concurrency.MainActor public struct PlatformViewVersionPredicate<SwiftUIViewType, PlatformSpecificEntity> where SwiftUIViewType : SwiftUIIntrospect.IntrospectableViewType, PlatformSpecificEntity : SwiftUIIntrospect.PlatformEntity {
+  @_Concurrency.MainActor public static func iOS(_ versions: (SwiftUIIntrospect.iOSViewVersion<SwiftUIViewType, PlatformSpecificEntity>)...) -> SwiftUIIntrospect.PlatformViewVersionPredicate<SwiftUIViewType, PlatformSpecificEntity>
+  @_spi(Advanced) @_Concurrency.MainActor public static func iOS(_ versions: Swift.PartialRangeFrom<SwiftUIIntrospect.iOSViewVersion<SwiftUIViewType, PlatformSpecificEntity>>) -> SwiftUIIntrospect.PlatformViewVersionPredicate<SwiftUIViewType, PlatformSpecificEntity>
+  @_Concurrency.MainActor public static func tvOS(_ versions: (SwiftUIIntrospect.tvOSViewVersion<SwiftUIViewType, PlatformSpecificEntity>)...) -> SwiftUIIntrospect.PlatformViewVersionPredicate<SwiftUIViewType, PlatformSpecificEntity>
+  @_spi(Advanced) @_Concurrency.MainActor public static func tvOS(_ versions: Swift.PartialRangeFrom<SwiftUIIntrospect.tvOSViewVersion<SwiftUIViewType, PlatformSpecificEntity>>) -> SwiftUIIntrospect.PlatformViewVersionPredicate<SwiftUIViewType, PlatformSpecificEntity>
+  @_Concurrency.MainActor public static func macOS(_ versions: (SwiftUIIntrospect.macOSViewVersion<SwiftUIViewType, PlatformSpecificEntity>)...) -> SwiftUIIntrospect.PlatformViewVersionPredicate<SwiftUIViewType, PlatformSpecificEntity>
+  @_spi(Advanced) @_Concurrency.MainActor public static func macOS(_ versions: Swift.PartialRangeFrom<SwiftUIIntrospect.macOSViewVersion<SwiftUIViewType, PlatformSpecificEntity>>) -> SwiftUIIntrospect.PlatformViewVersionPredicate<SwiftUIViewType, PlatformSpecificEntity>
+  @_Concurrency.MainActor public static func visionOS(_ versions: (SwiftUIIntrospect.visionOSViewVersion<SwiftUIViewType, PlatformSpecificEntity>)...) -> SwiftUIIntrospect.PlatformViewVersionPredicate<SwiftUIViewType, PlatformSpecificEntity>
+  @_spi(Advanced) @_Concurrency.MainActor public static func visionOS(_ versions: Swift.PartialRangeFrom<SwiftUIIntrospect.visionOSViewVersion<SwiftUIViewType, PlatformSpecificEntity>>) -> SwiftUIIntrospect.PlatformViewVersionPredicate<SwiftUIViewType, PlatformSpecificEntity>
+}
+public typealias iOSViewVersion<SwiftUIViewType, PlatformSpecificEntity> = SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIViewType, PlatformSpecificEntity> where SwiftUIViewType : SwiftUIIntrospect.IntrospectableViewType, PlatformSpecificEntity : SwiftUIIntrospect.PlatformEntity
+public typealias tvOSViewVersion<SwiftUIViewType, PlatformSpecificEntity> = SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIViewType, PlatformSpecificEntity> where SwiftUIViewType : SwiftUIIntrospect.IntrospectableViewType, PlatformSpecificEntity : SwiftUIIntrospect.PlatformEntity
+public typealias macOSViewVersion<SwiftUIViewType, PlatformSpecificEntity> = SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.macOSVersion, SwiftUIViewType, PlatformSpecificEntity> where SwiftUIViewType : SwiftUIIntrospect.IntrospectableViewType, PlatformSpecificEntity : SwiftUIIntrospect.PlatformEntity
+public typealias visionOSViewVersion<SwiftUIViewType, PlatformSpecificEntity> = SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIViewType, PlatformSpecificEntity> where SwiftUIViewType : SwiftUIIntrospect.IntrospectableViewType, PlatformSpecificEntity : SwiftUIIntrospect.PlatformEntity
+@_Concurrency.MainActor public enum PlatformViewVersion<Version, SwiftUIViewType, PlatformSpecificEntity> : Swift.Sendable where Version : SwiftUIIntrospect.PlatformVersion, SwiftUIViewType : SwiftUIIntrospect.IntrospectableViewType, PlatformSpecificEntity : SwiftUIIntrospect.PlatformEntity {
+  @_spi(Internals) case available(Version, SwiftUIIntrospect.IntrospectionSelector<PlatformSpecificEntity>?)
+  @_spi(Internals) case unavailable
+  @_spi(Advanced) @_Concurrency.MainActor public init(for version: Version, selector: SwiftUIIntrospect.IntrospectionSelector<PlatformSpecificEntity>? = nil)
+  @_spi(Advanced) @_Concurrency.MainActor public static func unavailable(file: Swift.StaticString = #file, line: Swift.UInt = #line) -> SwiftUIIntrospect.PlatformViewVersion<Version, SwiftUIViewType, PlatformSpecificEntity>
+}
+extension SwiftUIIntrospect.PlatformViewVersion : Swift.Comparable {
+  nonisolated public static func == (lhs: SwiftUIIntrospect.PlatformViewVersion<Version, SwiftUIViewType, PlatformSpecificEntity>, rhs: SwiftUIIntrospect.PlatformViewVersion<Version, SwiftUIViewType, PlatformSpecificEntity>) -> Swift.Bool
+  nonisolated public static func < (lhs: SwiftUIIntrospect.PlatformViewVersion<Version, SwiftUIViewType, PlatformSpecificEntity>, rhs: SwiftUIIntrospect.PlatformViewVersion<Version, SwiftUIViewType, PlatformSpecificEntity>) -> Swift.Bool
+}
+postfix operator ~
+@_Concurrency.MainActor public struct ButtonType : SwiftUIIntrospect.IntrospectableViewType {
+}
+@_Concurrency.MainActor public struct ColorPickerType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ColorPickerType {
+  @_Concurrency.MainActor public static var colorPicker: SwiftUIIntrospect.ColorPickerType {
+    get
+  }
+}
+@available(iOS 14, *)
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ColorPickerType, PlatformSpecificEntity == UIKit.UIColorWell {
+  @available(*, unavailable, message: "ColorPicker isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ColorPickerType, UIKit.UIColorWell>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ColorPickerType, UIKit.UIColorWell>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ColorPickerType, UIKit.UIColorWell>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ColorPickerType, UIKit.UIColorWell>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ColorPickerType, UIKit.UIColorWell>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ColorPickerType, UIKit.UIColorWell>
+}
+@available(iOS 14, *)
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ColorPickerType, PlatformSpecificEntity == UIKit.UIColorWell {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ColorPickerType, UIKit.UIColorWell>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ColorPickerType, UIKit.UIColorWell>
+}
+@_Concurrency.MainActor public struct DatePickerType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.DatePickerType {
+  @_Concurrency.MainActor public static var datePicker: SwiftUIIntrospect.DatePickerType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.DatePickerType, PlatformSpecificEntity == UIKit.UIDatePicker {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerType, UIKit.UIDatePicker>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.DatePickerType, PlatformSpecificEntity == UIKit.UIDatePicker {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.DatePickerType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.DatePickerType, UIKit.UIDatePicker>
+}
+@_Concurrency.MainActor public struct DatePickerWithCompactStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case compact
+    public static func == (a: SwiftUIIntrospect.DatePickerWithCompactStyleType.Style, b: SwiftUIIntrospect.DatePickerWithCompactStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.DatePickerWithCompactStyleType {
+  @_Concurrency.MainActor public static func datePicker(style: SwiftUIIntrospect.DatePickerWithCompactStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.DatePickerWithCompactStyleType, PlatformSpecificEntity == UIKit.UIDatePicker {
+  @available(*, unavailable, message: ".datePickerStyle(.compact) isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithCompactStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithCompactStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithCompactStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithCompactStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithCompactStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithCompactStyleType, UIKit.UIDatePicker>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.DatePickerWithCompactStyleType, PlatformSpecificEntity == UIKit.UIDatePicker {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.DatePickerWithCompactStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.DatePickerWithCompactStyleType, UIKit.UIDatePicker>
+}
+@_Concurrency.MainActor public struct DatePickerWithFieldStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case field
+    public static func == (a: SwiftUIIntrospect.DatePickerWithFieldStyleType.Style, b: SwiftUIIntrospect.DatePickerWithFieldStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+@_Concurrency.MainActor public struct DatePickerWithGraphicalStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case graphical
+    public static func == (a: SwiftUIIntrospect.DatePickerWithGraphicalStyleType.Style, b: SwiftUIIntrospect.DatePickerWithGraphicalStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.DatePickerWithGraphicalStyleType {
+  @_Concurrency.MainActor public static func datePicker(style: SwiftUIIntrospect.DatePickerWithGraphicalStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.DatePickerWithGraphicalStyleType, PlatformSpecificEntity == UIKit.UIDatePicker {
+  @available(*, unavailable, message: ".datePickerStyle(.graphical) isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithGraphicalStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithGraphicalStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithGraphicalStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithGraphicalStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithGraphicalStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithGraphicalStyleType, UIKit.UIDatePicker>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.DatePickerWithGraphicalStyleType, PlatformSpecificEntity == UIKit.UIDatePicker {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.DatePickerWithGraphicalStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.DatePickerWithGraphicalStyleType, UIKit.UIDatePicker>
+}
+@_Concurrency.MainActor public struct DatePickerWithStepperFieldStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case stepperField
+    public static func == (a: SwiftUIIntrospect.DatePickerWithStepperFieldStyleType.Style, b: SwiftUIIntrospect.DatePickerWithStepperFieldStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+@_Concurrency.MainActor public struct DatePickerWithWheelStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case wheel
+    public static func == (a: SwiftUIIntrospect.DatePickerWithWheelStyleType.Style, b: SwiftUIIntrospect.DatePickerWithWheelStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.DatePickerWithWheelStyleType {
+  @_Concurrency.MainActor public static func datePicker(style: SwiftUIIntrospect.DatePickerWithWheelStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.DatePickerWithWheelStyleType, PlatformSpecificEntity == UIKit.UIDatePicker {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithWheelStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithWheelStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithWheelStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithWheelStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithWheelStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.DatePickerWithWheelStyleType, UIKit.UIDatePicker>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.DatePickerWithWheelStyleType, PlatformSpecificEntity == UIKit.UIDatePicker {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.DatePickerWithWheelStyleType, UIKit.UIDatePicker>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.DatePickerWithWheelStyleType, UIKit.UIDatePicker>
+}
+@_Concurrency.MainActor public struct FormType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.FormType {
+  @_Concurrency.MainActor public static var form: SwiftUIIntrospect.FormType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.FormType, PlatformSpecificEntity == UIKit.UITableView {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormType, UIKit.UITableView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.FormType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormType, UIKit.UICollectionView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.FormType, PlatformSpecificEntity == UIKit.UITableView {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormType, UIKit.UITableView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.FormType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.FormType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.FormType, UIKit.UICollectionView>
+}
+@_Concurrency.MainActor public struct FormWithGroupedStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case grouped
+    public static func == (a: SwiftUIIntrospect.FormWithGroupedStyleType.Style, b: SwiftUIIntrospect.FormWithGroupedStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.FormWithGroupedStyleType {
+  @_Concurrency.MainActor public static func form(style: SwiftUIIntrospect.FormWithGroupedStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.FormWithGroupedStyleType, PlatformSpecificEntity == UIKit.UITableView {
+  @available(*, unavailable, message: ".formStyle(.grouped) isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UITableView>
+  @available(*, unavailable, message: ".formStyle(.grouped) isn't available on iOS 14")
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UITableView>
+  @available(*, unavailable, message: ".formStyle(.grouped) isn't available on iOS 15")
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UITableView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.FormWithGroupedStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UICollectionView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.FormWithGroupedStyleType, PlatformSpecificEntity == UIKit.UITableView {
+  @available(*, unavailable, message: ".formStyle(.grouped) isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UITableView>
+  @available(*, unavailable, message: ".formStyle(.grouped) isn't available on tvOS 14")
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UITableView>
+  @available(*, unavailable, message: ".formStyle(.grouped) isn't available on tvOS 15")
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UITableView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.FormWithGroupedStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.FormWithGroupedStyleType, UIKit.UICollectionView>
+}
+@_Concurrency.MainActor public struct FullScreenCoverType : SwiftUIIntrospect.IntrospectableViewType {
+  @_Concurrency.MainActor public var scope: SwiftUIIntrospect.IntrospectionScope {
+    get
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.FullScreenCoverType {
+  @_Concurrency.MainActor public static var fullScreenCover: SwiftUIIntrospect.FullScreenCoverType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.FullScreenCoverType, PlatformSpecificEntity == UIKit.UIPresentationController {
+  @available(*, unavailable, message: ".fullScreenCover isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.FullScreenCoverType, PlatformSpecificEntity == UIKit.UIPresentationController {
+  @available(*, unavailable, message: ".fullScreenCover isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.FullScreenCoverType, PlatformSpecificEntity == UIKit.UIPresentationController {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.FullScreenCoverType, UIKit.UIPresentationController>
+}
+@_Concurrency.MainActor public struct ListType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case plain
+    public static func == (a: SwiftUIIntrospect.ListType.Style, b: SwiftUIIntrospect.ListType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ListType {
+  @_Concurrency.MainActor public static var list: SwiftUIIntrospect.ListType {
+    get
+  }
+  @_Concurrency.MainActor public static func list(style: SwiftUIIntrospect.ListType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListType, PlatformSpecificEntity == UIKit.UITableView {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListType, UIKit.UITableView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListType, UIKit.UICollectionView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListType, PlatformSpecificEntity == UIKit.UITableView {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListType, UIKit.UITableView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListType, UIKit.UICollectionView>
+}
+@_Concurrency.MainActor public struct ListCellType : SwiftUIIntrospect.IntrospectableViewType {
+  @_Concurrency.MainActor public var scope: SwiftUIIntrospect.IntrospectionScope {
+    get
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ListCellType {
+  @_Concurrency.MainActor public static var listCell: SwiftUIIntrospect.ListCellType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListCellType, PlatformSpecificEntity == UIKit.UITableViewCell {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UITableViewCell>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UITableViewCell>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UITableViewCell>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListCellType, PlatformSpecificEntity == UIKit.UICollectionViewCell {
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UICollectionViewCell>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UICollectionViewCell>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UICollectionViewCell>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListCellType, PlatformSpecificEntity == UIKit.UITableViewCell {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UITableViewCell>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UITableViewCell>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UITableViewCell>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UITableViewCell>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UITableViewCell>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UITableViewCell>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListCellType, PlatformSpecificEntity == UIKit.UICollectionViewCell {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UICollectionViewCell>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListCellType, UIKit.UICollectionViewCell>
+}
+@_Concurrency.MainActor public struct ListWithBorderedStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case bordered
+    public static func == (a: SwiftUIIntrospect.ListWithBorderedStyleType.Style, b: SwiftUIIntrospect.ListWithBorderedStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+@_Concurrency.MainActor public struct ListWithGroupedStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case grouped
+    public static func == (a: SwiftUIIntrospect.ListWithGroupedStyleType.Style, b: SwiftUIIntrospect.ListWithGroupedStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ListWithGroupedStyleType {
+  @_Concurrency.MainActor public static func list(style: SwiftUIIntrospect.ListWithGroupedStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithGroupedStyleType, PlatformSpecificEntity == UIKit.UITableView {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UITableView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithGroupedStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UICollectionView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithGroupedStyleType, PlatformSpecificEntity == UIKit.UITableView {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UITableView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithGroupedStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListWithGroupedStyleType, UIKit.UICollectionView>
+}
+@_Concurrency.MainActor public struct ListWithInsetGroupedStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case insetGrouped
+    public static func == (a: SwiftUIIntrospect.ListWithInsetGroupedStyleType.Style, b: SwiftUIIntrospect.ListWithInsetGroupedStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ListWithInsetGroupedStyleType {
+  @_Concurrency.MainActor public static func list(style: SwiftUIIntrospect.ListWithInsetGroupedStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithInsetGroupedStyleType, PlatformSpecificEntity == UIKit.UITableView {
+  @available(*, unavailable, message: ".listStyle(.insetGrouped) isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetGroupedStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetGroupedStyleType, UIKit.UITableView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithInsetGroupedStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetGroupedStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetGroupedStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetGroupedStyleType, UIKit.UICollectionView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithInsetGroupedStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListWithInsetGroupedStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListWithInsetGroupedStyleType, UIKit.UICollectionView>
+}
+@_Concurrency.MainActor public struct ListWithInsetStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case inset
+    public static func == (a: SwiftUIIntrospect.ListWithInsetStyleType.Style, b: SwiftUIIntrospect.ListWithInsetStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ListWithInsetStyleType {
+  @_Concurrency.MainActor public static func list(style: SwiftUIIntrospect.ListWithInsetStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithInsetStyleType, PlatformSpecificEntity == UIKit.UITableView {
+  @available(*, unavailable, message: ".listStyle(.inset) isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetStyleType, UIKit.UITableView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithInsetStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithInsetStyleType, UIKit.UICollectionView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithInsetStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListWithInsetStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListWithInsetStyleType, UIKit.UICollectionView>
+}
+@_Concurrency.MainActor public struct ListWithSidebarStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case sidebar
+    public static func == (a: SwiftUIIntrospect.ListWithSidebarStyleType.Style, b: SwiftUIIntrospect.ListWithSidebarStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ListWithSidebarStyleType {
+  @_Concurrency.MainActor public static func list(style: SwiftUIIntrospect.ListWithSidebarStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithSidebarStyleType, PlatformSpecificEntity == UIKit.UITableView {
+  @available(*, unavailable, message: ".listStyle(.sidebar) isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithSidebarStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithSidebarStyleType, UIKit.UITableView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithSidebarStyleType, UIKit.UITableView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithSidebarStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithSidebarStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithSidebarStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ListWithSidebarStyleType, UIKit.UICollectionView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ListWithSidebarStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListWithSidebarStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ListWithSidebarStyleType, UIKit.UICollectionView>
+}
+@_Concurrency.MainActor public struct MapType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.MapType {
+  @_Concurrency.MainActor public static var map: SwiftUIIntrospect.MapType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.MapType, PlatformSpecificEntity == MapKit.MKMapView {
+  @available(*, unavailable, message: "Map isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.MapType, PlatformSpecificEntity == MapKit.MKMapView {
+  @available(*, unavailable, message: "Map isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.macOSVersion, SwiftUIViewType == SwiftUIIntrospect.MapType, PlatformSpecificEntity == MapKit.MKMapView {
+  @available(*, unavailable, message: "Map isn't available on macOS 10.15")
+  @_Concurrency.MainActor public static let v10_15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.macOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v11: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.macOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v12: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.macOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.macOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.macOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.macOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.MapType, PlatformSpecificEntity == MapKit.MKMapView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.MapType, MapKit.MKMapView>
+}
+@_Concurrency.MainActor public struct NavigationSplitViewType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.NavigationSplitViewType {
+  @_Concurrency.MainActor public static var navigationSplitView: SwiftUIIntrospect.NavigationSplitViewType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationSplitViewType, PlatformSpecificEntity == UIKit.UISplitViewController {
+  @available(*, unavailable, message: "NavigationSplitView isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UISplitViewController>
+  @available(*, unavailable, message: "NavigationSplitView isn't available on iOS 14")
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UISplitViewController>
+  @available(*, unavailable, message: "NavigationSplitView isn't available on iOS 15")
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UISplitViewController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UISplitViewController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UISplitViewController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UISplitViewController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationSplitViewType, PlatformSpecificEntity == UIKit.UINavigationController {
+  @available(*, unavailable, message: "NavigationSplitView isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UINavigationController>
+  @available(*, unavailable, message: "NavigationSplitView isn't available on tvOS 14")
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UINavigationController>
+  @available(*, unavailable, message: "NavigationSplitView isn't available on tvOS 15")
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UINavigationController>
+  @available(*, unavailable, message: "NavigationSplitView isn't backed by UIKit since tvOS 18")
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UINavigationController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationSplitViewType, PlatformSpecificEntity == UIKit.UISplitViewController {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UISplitViewController>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.NavigationSplitViewType, UIKit.UISplitViewController>
+}
+@_Concurrency.MainActor public struct NavigationStackType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.NavigationStackType {
+  @_Concurrency.MainActor public static var navigationStack: SwiftUIIntrospect.NavigationStackType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationStackType, PlatformSpecificEntity == UIKit.UINavigationController {
+  @available(*, unavailable, message: "NavigationStack isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+  @available(*, unavailable, message: "NavigationStack isn't available on iOS 14")
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+  @available(*, unavailable, message: "NavigationStack isn't available on iOS 15")
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationStackType, PlatformSpecificEntity == UIKit.UINavigationController {
+  @available(*, unavailable, message: "NavigationStack isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+  @available(*, unavailable, message: "NavigationStack isn't available on tvOS 14")
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+  @available(*, unavailable, message: "NavigationStack isn't available on tvOS 15")
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationStackType, PlatformSpecificEntity == UIKit.UINavigationController {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.NavigationStackType, UIKit.UINavigationController>
+}
+@_Concurrency.MainActor public struct NavigationViewWithColumnsStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case columns
+    public static func == (a: SwiftUIIntrospect.NavigationViewWithColumnsStyleType.Style, b: SwiftUIIntrospect.NavigationViewWithColumnsStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.NavigationViewWithColumnsStyleType {
+  @_Concurrency.MainActor public static func navigationView(style: SwiftUIIntrospect.NavigationViewWithColumnsStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationViewWithColumnsStyleType, PlatformSpecificEntity == UIKit.UISplitViewController {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UISplitViewController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UISplitViewController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UISplitViewController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UISplitViewController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UISplitViewController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UISplitViewController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationViewWithColumnsStyleType, PlatformSpecificEntity == UIKit.UINavigationController {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UINavigationController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationViewWithColumnsStyleType, PlatformSpecificEntity == UIKit.UISplitViewController {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UISplitViewController>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.NavigationViewWithColumnsStyleType, UIKit.UISplitViewController>
+}
+@_Concurrency.MainActor public struct NavigationViewWithStackStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case stack
+    public static func == (a: SwiftUIIntrospect.NavigationViewWithStackStyleType.Style, b: SwiftUIIntrospect.NavigationViewWithStackStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.NavigationViewWithStackStyleType {
+  @_Concurrency.MainActor public static func navigationView(style: SwiftUIIntrospect.NavigationViewWithStackStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationViewWithStackStyleType, PlatformSpecificEntity == UIKit.UINavigationController {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationViewWithStackStyleType, PlatformSpecificEntity == UIKit.UINavigationController {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.NavigationViewWithStackStyleType, PlatformSpecificEntity == UIKit.UINavigationController {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.NavigationViewWithStackStyleType, UIKit.UINavigationController>
+}
+@_Concurrency.MainActor public struct PageControlType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.PageControlType {
+  @_Concurrency.MainActor public static var pageControl: SwiftUIIntrospect.PageControlType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.PageControlType, PlatformSpecificEntity == UIKit.UIPageControl {
+  @available(*, unavailable, message: ".tabViewStyle(.page) isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.PageControlType, PlatformSpecificEntity == UIKit.UIPageControl {
+  @available(*, unavailable, message: ".tabViewStyle(.page) isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.PageControlType, PlatformSpecificEntity == UIKit.UIPageControl {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.PageControlType, UIKit.UIPageControl>
+}
+@_Concurrency.MainActor public struct PickerWithMenuStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case menu
+    public static func == (a: SwiftUIIntrospect.PickerWithMenuStyleType.Style, b: SwiftUIIntrospect.PickerWithMenuStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+@_Concurrency.MainActor public struct PickerWithSegmentedStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case segmented
+    public static func == (a: SwiftUIIntrospect.PickerWithSegmentedStyleType.Style, b: SwiftUIIntrospect.PickerWithSegmentedStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.PickerWithSegmentedStyleType {
+  @_Concurrency.MainActor public static func picker(style: SwiftUIIntrospect.PickerWithSegmentedStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.PickerWithSegmentedStyleType, PlatformSpecificEntity == UIKit.UISegmentedControl {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.PickerWithSegmentedStyleType, PlatformSpecificEntity == UIKit.UISegmentedControl {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.PickerWithSegmentedStyleType, PlatformSpecificEntity == UIKit.UISegmentedControl {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.PickerWithSegmentedStyleType, UIKit.UISegmentedControl>
+}
+@_Concurrency.MainActor public struct PickerWithWheelStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case wheel
+    public static func == (a: SwiftUIIntrospect.PickerWithWheelStyleType.Style, b: SwiftUIIntrospect.PickerWithWheelStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.PickerWithWheelStyleType {
+  @_Concurrency.MainActor public static func picker(style: SwiftUIIntrospect.PickerWithWheelStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.PickerWithWheelStyleType, PlatformSpecificEntity == UIKit.UIPickerView {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithWheelStyleType, UIKit.UIPickerView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithWheelStyleType, UIKit.UIPickerView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithWheelStyleType, UIKit.UIPickerView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithWheelStyleType, UIKit.UIPickerView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithWheelStyleType, UIKit.UIPickerView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PickerWithWheelStyleType, UIKit.UIPickerView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.PickerWithWheelStyleType, PlatformSpecificEntity == UIKit.UIPickerView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.PickerWithWheelStyleType, UIKit.UIPickerView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.PickerWithWheelStyleType, UIKit.UIPickerView>
+}
+@_Concurrency.MainActor public struct PopoverType : SwiftUIIntrospect.IntrospectableViewType {
+  @_Concurrency.MainActor public var scope: SwiftUIIntrospect.IntrospectionScope {
+    get
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.PopoverType {
+  @_Concurrency.MainActor public static var popover: SwiftUIIntrospect.PopoverType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.PopoverType, PlatformSpecificEntity == UIKit.UIPopoverPresentationController {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PopoverType, UIKit.UIPopoverPresentationController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PopoverType, UIKit.UIPopoverPresentationController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PopoverType, UIKit.UIPopoverPresentationController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PopoverType, UIKit.UIPopoverPresentationController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PopoverType, UIKit.UIPopoverPresentationController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.PopoverType, UIKit.UIPopoverPresentationController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.PopoverType, PlatformSpecificEntity == UIKit.UIPopoverPresentationController {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.PopoverType, UIKit.UIPopoverPresentationController>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.PopoverType, UIKit.UIPopoverPresentationController>
+}
+@_Concurrency.MainActor public struct ProgressViewWithCircularStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case circular
+    public static func == (a: SwiftUIIntrospect.ProgressViewWithCircularStyleType.Style, b: SwiftUIIntrospect.ProgressViewWithCircularStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ProgressViewWithCircularStyleType {
+  @_Concurrency.MainActor public static func progressView(style: SwiftUIIntrospect.ProgressViewWithCircularStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ProgressViewWithCircularStyleType, PlatformSpecificEntity == UIKit.UIActivityIndicatorView {
+  @available(*, unavailable, message: ".progressViewStyle(.circular) isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.ProgressViewWithCircularStyleType, PlatformSpecificEntity == UIKit.UIActivityIndicatorView {
+  @available(*, unavailable, message: ".progressViewStyle(.circular) isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ProgressViewWithCircularStyleType, PlatformSpecificEntity == UIKit.UIActivityIndicatorView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ProgressViewWithCircularStyleType, UIKit.UIActivityIndicatorView>
+}
+@_Concurrency.MainActor public struct ProgressViewWithLinearStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case linear
+    public static func == (a: SwiftUIIntrospect.ProgressViewWithLinearStyleType.Style, b: SwiftUIIntrospect.ProgressViewWithLinearStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ProgressViewWithLinearStyleType {
+  @_Concurrency.MainActor public static func progressView(style: SwiftUIIntrospect.ProgressViewWithLinearStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ProgressViewWithLinearStyleType, PlatformSpecificEntity == UIKit.UIProgressView {
+  @available(*, unavailable, message: ".progressViewStyle(.linear) isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.ProgressViewWithLinearStyleType, PlatformSpecificEntity == UIKit.UIProgressView {
+  @available(*, unavailable, message: ".progressViewStyle(.linear) isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ProgressViewWithLinearStyleType, PlatformSpecificEntity == UIKit.UIProgressView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ProgressViewWithLinearStyleType, UIKit.UIProgressView>
+}
+@_Concurrency.MainActor public struct ScrollViewType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ScrollViewType {
+  @_Concurrency.MainActor public static var scrollView: SwiftUIIntrospect.ScrollViewType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ScrollViewType, PlatformSpecificEntity == UIKit.UIScrollView {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.ScrollViewType, PlatformSpecificEntity == UIKit.UIScrollView {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ScrollViewType, PlatformSpecificEntity == UIKit.UIScrollView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ScrollViewType, UIKit.UIScrollView>
+}
+@_Concurrency.MainActor public struct SearchFieldType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.SearchFieldType {
+  @_Concurrency.MainActor public static var searchField: SwiftUIIntrospect.SearchFieldType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.SearchFieldType, PlatformSpecificEntity == UIKit.UISearchBar {
+  @available(*, unavailable, message: ".searchable isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+  @available(*, unavailable, message: ".searchable isn't available on iOS 14")
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.SearchFieldType, PlatformSpecificEntity == UIKit.UISearchBar {
+  @available(*, unavailable, message: ".searchable isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+  @available(*, unavailable, message: ".searchable isn't available on tvOS 14")
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.SearchFieldType, PlatformSpecificEntity == UIKit.UISearchBar {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.SearchFieldType, UIKit.UISearchBar>
+}
+@_Concurrency.MainActor public struct SecureFieldType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.SecureFieldType {
+  @_Concurrency.MainActor public static var secureField: SwiftUIIntrospect.SecureFieldType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.SecureFieldType, PlatformSpecificEntity == UIKit.UITextField {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.SecureFieldType, PlatformSpecificEntity == UIKit.UITextField {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.SecureFieldType, PlatformSpecificEntity == UIKit.UITextField {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.SecureFieldType, UIKit.UITextField>
+}
+@_Concurrency.MainActor public struct SheetType : SwiftUIIntrospect.IntrospectableViewType {
+  @_Concurrency.MainActor public var scope: SwiftUIIntrospect.IntrospectionScope {
+    get
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.SheetType {
+  @_Concurrency.MainActor public static var sheet: SwiftUIIntrospect.SheetType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.SheetType, PlatformSpecificEntity == UIKit.UIPresentationController {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+}
+@available(iOS 15, *)
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.SheetType, PlatformSpecificEntity == UIKit.UISheetPresentationController {
+  @_disfavoredOverload @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SheetType, UIKit.UISheetPresentationController>
+  @_disfavoredOverload @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SheetType, UIKit.UISheetPresentationController>
+  @_disfavoredOverload @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SheetType, UIKit.UISheetPresentationController>
+  @_disfavoredOverload @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SheetType, UIKit.UISheetPresentationController>
+}
+@available(iOS 15, *)
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.SheetType, PlatformSpecificEntity == UIKit.UISheetPresentationController {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.SheetType, UIKit.UISheetPresentationController>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.SheetType, UIKit.UISheetPresentationController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.SheetType, PlatformSpecificEntity == UIKit.UIPresentationController {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.SheetType, UIKit.UIPresentationController>
+}
+@_Concurrency.MainActor public struct SignInWithAppleButtonType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.SignInWithAppleButtonType {
+  @available(*, unavailable, message: "Due to a mysterious bug on Apple's part that may cause a complete\napp hang, the unfortunate decision has been made to remove support\nfor `SignInWithAppleButton` introspection.\n\nWe apologize for this inconvenience.\n\nMore details can be found at https://github.com/siteline/swiftui-introspect/issues/400")
+  @_Concurrency.MainActor public static var signInWithAppleButton: SwiftUIIntrospect.SignInWithAppleButtonType {
+    get
+  }
+}
+@_Concurrency.MainActor public struct SliderType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.SliderType {
+  @_Concurrency.MainActor public static var slider: SwiftUIIntrospect.SliderType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.SliderType, PlatformSpecificEntity == UIKit.UISlider {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SliderType, UIKit.UISlider>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SliderType, UIKit.UISlider>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SliderType, UIKit.UISlider>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SliderType, UIKit.UISlider>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SliderType, UIKit.UISlider>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.SliderType, UIKit.UISlider>
+}
+@_Concurrency.MainActor public struct StepperType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.StepperType {
+  @_Concurrency.MainActor public static var stepper: SwiftUIIntrospect.StepperType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.StepperType, PlatformSpecificEntity == UIKit.UIStepper {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.StepperType, UIKit.UIStepper>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.StepperType, UIKit.UIStepper>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.StepperType, UIKit.UIStepper>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.StepperType, UIKit.UIStepper>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.StepperType, UIKit.UIStepper>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.StepperType, UIKit.UIStepper>
+}
+@_Concurrency.MainActor public struct TabViewType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.TabViewType {
+  @_Concurrency.MainActor public static var tabView: SwiftUIIntrospect.TabViewType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.TabViewType, PlatformSpecificEntity == UIKit.UITabBarController {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.TabViewType, PlatformSpecificEntity == UIKit.UITabBarController {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewType, UIKit.UITabBarController>
+}
+@_Concurrency.MainActor public struct TabViewWithPageStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case page
+    public static func == (a: SwiftUIIntrospect.TabViewWithPageStyleType.Style, b: SwiftUIIntrospect.TabViewWithPageStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.TabViewWithPageStyleType {
+  @_Concurrency.MainActor public static func tabView(style: SwiftUIIntrospect.TabViewWithPageStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.TabViewWithPageStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @available(*, unavailable, message: ".tabViewStyle(.page) isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.TabViewWithPageStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @available(*, unavailable, message: ".tabViewStyle(.page) isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.TabViewWithPageStyleType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.TabViewWithPageStyleType, UIKit.UICollectionView>
+}
+@_Concurrency.MainActor public struct TableType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.TableType {
+  @_Concurrency.MainActor public static var table: SwiftUIIntrospect.TableType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.TableType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @available(*, unavailable, message: "Table isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TableType, UIKit.UICollectionView>
+  @available(*, unavailable, message: "Table isn't available on iOS 14")
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TableType, UIKit.UICollectionView>
+  @available(*, unavailable, message: "Table isn't available on iOS 15")
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TableType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TableType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TableType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TableType, UIKit.UICollectionView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.TableType, PlatformSpecificEntity == UIKit.UICollectionView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.TableType, UIKit.UICollectionView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.TableType, UIKit.UICollectionView>
+}
+@_Concurrency.MainActor public struct TextEditorType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.TextEditorType {
+  @_Concurrency.MainActor public static var textEditor: SwiftUIIntrospect.TextEditorType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.TextEditorType, PlatformSpecificEntity == UIKit.UITextView {
+  @available(*, unavailable, message: "TextEditor isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextEditorType, UIKit.UITextView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextEditorType, UIKit.UITextView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextEditorType, UIKit.UITextView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextEditorType, UIKit.UITextView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextEditorType, UIKit.UITextView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextEditorType, UIKit.UITextView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.TextEditorType, PlatformSpecificEntity == UIKit.UITextView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.TextEditorType, UIKit.UITextView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.TextEditorType, UIKit.UITextView>
+}
+@_Concurrency.MainActor public struct TextFieldType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.TextFieldType {
+  @_Concurrency.MainActor public static var textField: SwiftUIIntrospect.TextFieldType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.TextFieldType, PlatformSpecificEntity == UIKit.UITextField {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.TextFieldType, PlatformSpecificEntity == UIKit.UITextField {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.TextFieldType, PlatformSpecificEntity == UIKit.UITextField {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.TextFieldType, UIKit.UITextField>
+}
+@_Concurrency.MainActor public struct TextFieldWithVerticalAxisType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Axis : Swift.Sendable {
+    case vertical
+    public static func == (a: SwiftUIIntrospect.TextFieldWithVerticalAxisType.Axis, b: SwiftUIIntrospect.TextFieldWithVerticalAxisType.Axis) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.TextFieldWithVerticalAxisType {
+  @_Concurrency.MainActor public static func textField(axis: SwiftUIIntrospect.TextFieldWithVerticalAxisType.Axis) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.TextFieldWithVerticalAxisType, PlatformSpecificEntity == UIKit.UITextView {
+  @available(*, unavailable, message: "TextField(..., axis: .vertical) isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextView>
+  @available(*, unavailable, message: "TextField(..., axis: .vertical) isn't available on iOS 14")
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextView>
+  @available(*, unavailable, message: "TextField(..., axis: .vertical) isn't available on iOS 15")
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.TextFieldWithVerticalAxisType, PlatformSpecificEntity == UIKit.UITextField {
+  @available(*, unavailable, message: "TextField(..., axis: .vertical) isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextField>
+  @available(*, unavailable, message: "TextField(..., axis: .vertical) isn't available on tvOS 14")
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextField>
+  @available(*, unavailable, message: "TextField(..., axis: .vertical) isn't available on tvOS 15")
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextField>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextField>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.TextFieldWithVerticalAxisType, PlatformSpecificEntity == UIKit.UITextView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.TextFieldWithVerticalAxisType, UIKit.UITextView>
+}
+@_Concurrency.MainActor public struct ToggleType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ToggleType {
+  @_Concurrency.MainActor public static var toggle: SwiftUIIntrospect.ToggleType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ToggleType, PlatformSpecificEntity == UIKit.UISwitch {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleType, UIKit.UISwitch>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleType, UIKit.UISwitch>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleType, UIKit.UISwitch>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleType, UIKit.UISwitch>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleType, UIKit.UISwitch>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleType, UIKit.UISwitch>
+}
+@_Concurrency.MainActor public struct ToggleWithButtonStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case button
+    public static func == (a: SwiftUIIntrospect.ToggleWithButtonStyleType.Style, b: SwiftUIIntrospect.ToggleWithButtonStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+@_Concurrency.MainActor public struct ToggleWithCheckboxStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case checkbox
+    public static func == (a: SwiftUIIntrospect.ToggleWithCheckboxStyleType.Style, b: SwiftUIIntrospect.ToggleWithCheckboxStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+@_Concurrency.MainActor public struct ToggleWithSwitchStyleType : SwiftUIIntrospect.IntrospectableViewType {
+  public enum Style : Swift.Sendable {
+    case `switch`
+    public static func == (a: SwiftUIIntrospect.ToggleWithSwitchStyleType.Style, b: SwiftUIIntrospect.ToggleWithSwitchStyleType.Style) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ToggleWithSwitchStyleType {
+  @_Concurrency.MainActor public static func toggle(style: SwiftUIIntrospect.ToggleWithSwitchStyleType.Style) -> Self
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ToggleWithSwitchStyleType, PlatformSpecificEntity == UIKit.UISwitch {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleWithSwitchStyleType, UIKit.UISwitch>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleWithSwitchStyleType, UIKit.UISwitch>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleWithSwitchStyleType, UIKit.UISwitch>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleWithSwitchStyleType, UIKit.UISwitch>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleWithSwitchStyleType, UIKit.UISwitch>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ToggleWithSwitchStyleType, UIKit.UISwitch>
+}
+@_Concurrency.MainActor public struct VideoPlayerType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.VideoPlayerType {
+  @_Concurrency.MainActor public static var videoPlayer: SwiftUIIntrospect.VideoPlayerType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.VideoPlayerType, PlatformSpecificEntity == AVKit.AVPlayerViewController {
+  @available(*, unavailable, message: "VideoPlayer isn't available on iOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.VideoPlayerType, PlatformSpecificEntity == AVKit.AVPlayerViewController {
+  @available(*, unavailable, message: "VideoPlayer isn't available on tvOS 13")
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.VideoPlayerType, PlatformSpecificEntity == AVKit.AVPlayerViewController {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.VideoPlayerType, AVKit.AVPlayerViewController>
+}
+@_Concurrency.MainActor public struct ViewType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ViewType {
+  @_Concurrency.MainActor public static var view: SwiftUIIntrospect.ViewType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ViewType, PlatformSpecificEntity == UIKit.UIView {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.ViewType, PlatformSpecificEntity == UIKit.UIView {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ViewType, PlatformSpecificEntity == UIKit.UIView {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ViewType, UIKit.UIView>
+}
+@_Concurrency.MainActor public struct ViewControllerType : SwiftUIIntrospect.IntrospectableViewType {
+  @_Concurrency.MainActor public var scope: SwiftUIIntrospect.IntrospectionScope {
+    get
+  }
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.ViewControllerType {
+  @_Concurrency.MainActor public static var viewController: SwiftUIIntrospect.ViewControllerType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.ViewControllerType, PlatformSpecificEntity == UIKit.UIViewController {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.ViewControllerType, PlatformSpecificEntity == UIKit.UIViewController {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.ViewControllerType, PlatformSpecificEntity == UIKit.UIViewController {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.ViewControllerType, UIKit.UIViewController>
+}
+@_Concurrency.MainActor public struct WindowType : SwiftUIIntrospect.IntrospectableViewType {
+}
+extension SwiftUIIntrospect.IntrospectableViewType where Self == SwiftUIIntrospect.WindowType {
+  @_Concurrency.MainActor public static var window: SwiftUIIntrospect.WindowType {
+    get
+  }
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.iOSVersion, SwiftUIViewType == SwiftUIIntrospect.WindowType, PlatformSpecificEntity == UIKit.UIWindow {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.iOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.tvOSVersion, SwiftUIViewType == SwiftUIIntrospect.WindowType, PlatformSpecificEntity == UIKit.UIWindow {
+  @_Concurrency.MainActor public static let v13: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+  @_Concurrency.MainActor public static let v14: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+  @_Concurrency.MainActor public static let v15: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+  @_Concurrency.MainActor public static let v16: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+  @_Concurrency.MainActor public static let v17: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+  @_Concurrency.MainActor public static let v18: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.tvOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+}
+extension SwiftUIIntrospect.PlatformViewVersion where Version == SwiftUIIntrospect.visionOSVersion, SwiftUIViewType == SwiftUIIntrospect.WindowType, PlatformSpecificEntity == UIKit.UIWindow {
+  @_Concurrency.MainActor public static let v1: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+  @_Concurrency.MainActor public static let v2: SwiftUIIntrospect.PlatformViewVersion<SwiftUIIntrospect.visionOSVersion, SwiftUIIntrospect.WindowType, UIKit.UIWindow>
+}
+@_spi(Advanced) @propertyWrapper final public class Weak<T> where T : AnyObject {
+  @_spi(Advanced) final public var wrappedValue: T? {
+    @_spi(Advanced) get
+    @_spi(Advanced) set
+  }
+  @_spi(Advanced) public init(wrappedValue: T? = nil)
+  @_spi(Advanced) @objc deinit
+}
+@_spi(Advanced) extension SwiftUIIntrospect.IntrospectionSelector : Swift.Sendable {}
+@_spi(Internals) extension SwiftUIIntrospect.PlatformVersionCondition : Swift.Equatable {}
+@_spi(Internals) extension SwiftUIIntrospect.PlatformVersionCondition : Swift.Hashable {}
+extension SwiftUIIntrospect.PlatformViewVersionPredicate : Swift.Sendable {}
+extension SwiftUIIntrospect.DatePickerWithCompactStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.DatePickerWithCompactStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.DatePickerWithFieldStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.DatePickerWithFieldStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.DatePickerWithGraphicalStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.DatePickerWithGraphicalStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.DatePickerWithStepperFieldStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.DatePickerWithStepperFieldStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.DatePickerWithWheelStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.DatePickerWithWheelStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.FormWithGroupedStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.FormWithGroupedStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.ListType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.ListType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.ListWithBorderedStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.ListWithBorderedStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.ListWithGroupedStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.ListWithGroupedStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.ListWithInsetGroupedStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.ListWithInsetGroupedStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.ListWithInsetStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.ListWithInsetStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.ListWithSidebarStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.ListWithSidebarStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.NavigationViewWithColumnsStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.NavigationViewWithColumnsStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.NavigationViewWithStackStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.NavigationViewWithStackStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.PickerWithMenuStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.PickerWithMenuStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.PickerWithSegmentedStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.PickerWithSegmentedStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.PickerWithWheelStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.PickerWithWheelStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.ProgressViewWithCircularStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.ProgressViewWithCircularStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.ProgressViewWithLinearStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.ProgressViewWithLinearStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.TabViewWithPageStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.TabViewWithPageStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.TextFieldWithVerticalAxisType.Axis : Swift.Equatable {}
+extension SwiftUIIntrospect.TextFieldWithVerticalAxisType.Axis : Swift.Hashable {}
+extension SwiftUIIntrospect.ToggleWithButtonStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.ToggleWithButtonStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.ToggleWithCheckboxStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.ToggleWithCheckboxStyleType.Style : Swift.Hashable {}
+extension SwiftUIIntrospect.ToggleWithSwitchStyleType.Style : Swift.Equatable {}
+extension SwiftUIIntrospect.ToggleWithSwitchStyleType.Style : Swift.Hashable {}
